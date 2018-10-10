@@ -18,7 +18,7 @@
 
 ### Used cumulative stats rather than averages
 
-###### 1B, 2B, 3B, HR, BB, SO, H-allowed, HR-allowed, BB-allwoed, Errors
+###### 1B, 2B, 3B, HR, BB, SO, H-allowed, HR-allowed, BB-allowed, Errors
 
 <!-- ![lessvifs](/Users/ryanholway/Documents/galvanize/capstone_I/figures/less-vifs.png) -->
 <img src='figures/less-vifs.png'/>

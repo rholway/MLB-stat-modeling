@@ -44,17 +44,27 @@ if __name__ == '__main__':
     df['1B'] = df['H'] - df['HR'] - df['3B'] - df['2B']
     df1 = df.filter(['1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','E'])
 
+    wdf = df.filter(['W','1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','E'])
+    wdf = wdf.query('W > 95')
+    wdf_x = wdf.drop(['W'], axis=1)
+
     columns = ['1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','SO-pitched','E']
     y = df['W'].values
     X = df1.values
+
+    w_columns = ['1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','SO-pitched','E']
+    w_y = wdf['W']
+    w_X = wdf_x.values
     #standardize data
     standardizer = StandardScaler()
     X_std = standardizer.fit_transform(X)
     #test train split from standardized data
     X_train, X_test, y_train, y_test = train_test_split(X_std, y, random_state=42)
 
-    # X_train_std = standardizer.transform(X_train)
-    # X_test_std = standardizer.transform(X_test)
+    w_X_std = standardizer.fit_transform(w_X)
+
+
+
 
     ridge = make_ridge(X_train, y_train)
     lasso = make_lasso(X_train, y_train)
@@ -81,7 +91,8 @@ if __name__ == '__main__':
     # print(f'Ridge accuracy: {get_accuracy(y,rounded_ridge)}')
     # print(f'Lasso accuracy: {get_accuracy(y,rounded_lasso)}')
 
-    # print (rounded_lasso)
+    print(wdf.shape)
+
 
     nalphas = 50
     min_alpha_exp = -1
