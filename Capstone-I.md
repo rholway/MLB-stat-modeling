@@ -11,7 +11,8 @@
 
 # Variance Inflation Factors (VIFs)
 
-![VIFfactor](/Users/ryanholway/Documents/galvanize/capstone_I/figures/high-vifs.png)
+<!-- ![VIFfactor](/Users/ryanholway/Documents/galvanize/capstone_I/figures/high-vifs.png) -->
+<img src='figures/high-vifs.png'/>
 
 # Eliminate Features
 
@@ -19,22 +20,25 @@
 
 ###### 1B, 2B, 3B, HR, BB, SO, H-allowed, HR-allowed, BB-allwoed, Errors
 
-![VIFfactor](/Users/ryanholway/Documents/galvanize/capstone_I/figures/less-vifs.png)
+<!-- ![lessvifs](/Users/ryanholway/Documents/galvanize/capstone_I/figures/less-vifs.png) -->
+<img src='figures/less-vifs.png'/>
 
 
-![Rsqd-pvals](/Users/ryanholway/Documents/galvanize/capstone_I/figures/rsqd-pvals.png)
+<!-- ![Rsqd-pvals](/Users/ryanholway/Documents/galvanize/capstone_I/figures/rsqd-pvals.png) -->
+<img src='figures/rsqd-pvals.png'/>
 
 # EDA
 
 ### Offensive stats
 
-![hit-stats](/Users/ryanholway/Documents/galvanize/capstone_I/figures/hit-stats-fig.png)
+<!-- ![hit-stats](/Users/ryanholway/Documents/galvanize/capstone_I/figures/hit-stats-fig.png) -->
+<img src='figures/hit-stats-fig.png'/>
 
 
 ### Defensive / Pitching stats
 
-![pitch-stats](/Users/ryanholway/Documents/galvanize/capstone_I/figures/pitch-stats-fig.png)
-
+<!-- ![pitch-stats](/Users/ryanholway/Documents/galvanize/capstone_I/figures/pitch-stats-fig.png) -->
+<img src='figures/pitch-stats-fig.png'/>
 
 # Lasso Regression
 
@@ -42,8 +46,8 @@
 ##### Training best alpha: 0.002
 ##### Test R-squared: 0.822
 
-![lasso-fig](/Users/ryanholway/Documents/galvanize/capstone_I/figures/lasso-fig.png)
-<!-- <img src='figures/lasso-fig.png'/> -->
+<!-- ![lasso-fig](/Users/ryanholway/Documents/galvanize/capstone_I/figures/lasso-fig.png) -->
+<img src='figures/lasso-fig.png'/>
 
 # Ridge Regression
 
@@ -51,7 +55,8 @@
 ##### Training best alpha: 8.286
 ##### Test R-squared: 0.821
 
-![ridge-fig](/Users/ryanholway/Documents/galvanize/capstone_I/figures/ridge-fig.png)
+<!-- ![ridge-fig](/Users/ryanholway/Documents/galvanize/capstone_I/figures/ridge-fig.png) -->
+<img src='figures/ridge-fig.png'/>
 
 # Predicted vs. Actual
 
@@ -69,9 +74,11 @@
 
 ##### Scatter plot of predicted wins and residuals
 
-![residuals](/Users/ryanholway/Documents/galvanize/capstone_I/figures/residuals.png)
+<!-- ![residuals](/Users/ryanholway/Documents/galvanize/capstone_I/figures/residuals.png) -->
+<img src='figures/residuals.png'/>
 
 
-#### QQ plots 
+#### QQ plots
 
-![QQplots](/Users/ryanholway/Documents/galvanize/capstone_I/figures/QQplots.png)
+<!-- ![QQplots](/Users/ryanholway/Documents/galvanize/capstone_I/figures/QQplots.png) -->
+<img src='figures/QQplots.png'/>
