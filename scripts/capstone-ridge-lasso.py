@@ -3,12 +3,14 @@ from sklearn.linear_model import Ridge, RidgeCV
 from sklearn.linear_model import Lasso, LassoCV
 from sklearn.linear_model import ElasticNet, ElasticNetCV
 from sklearn.linear_model import Lars, LassoLars, LassoLarsCV
-from sklearn.metrics import roc_auc_score, r2_score, mean_squared_log_error, mean_squared_error
+from sklearn.metrics import roc_auc_score, r2_score, mean_squared_log_error, mean_squared_error, accuracy_score
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_validate
 from sklearn.preprocessing import StandardScaler
+import statsmodels.api as sm
+from math import sqrt
 import pandas as pd
 import numpy as np
 import operator
@@ -26,11 +28,21 @@ def make_ridge(X, y, cv=10):
     print(f'Ridge train R^2: {ridge.score(X,y)}, alpha: {ridge.alpha_}')
     return ridge
 
+def rmsle(y_actual, y_predicted):
+   return sqrt(mean_squared_log_error(y_actual, y_predicted))
+
+def rmse(y_actual, y_predicted):
+   return sqrt(mean_squared_error(y_actual, y_predicted))
+
+def get_accuracy(y_actual, y_predicted, normalize=False):
+    return accuracy_score(y_actual, y_predicted)
+
+
 
 if __name__ == '__main__':
     df = pd.read_excel('/Users/ryanholway/Documents/galvanize/capstone_I/data-trials/pitching-and-batting-all.xlsx')
     df['1B'] = df['H'] - df['HR'] - df['3B'] - df['2B']
-    df1 = df.filter(['1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','SO-pitched','E'])
+    df1 = df.filter(['1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','E'])
 
     columns = ['1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','SO-pitched','E']
     y = df['W'].values
@@ -47,11 +59,29 @@ if __name__ == '__main__':
     ridge = make_ridge(X_train, y_train)
     lasso = make_lasso(X_train, y_train)
 
-    print(f'Ridge test R^2: {ridge.score(X_test, y_test)}')
-    print(f'Lasso test R^2: {lasso.score(X_test, y_test)}')
+    ridge_predictions = ridge.predict(X_std)
+    lasso_predictions = lasso.predict(X_std)
 
-    print(f'Ridge predict: {ridge.predict(X_std)}')
-    print(f'Lasso predict: {lasso.predict(X_std)}')
+    # print(f'Ridge test R^2: {ridge.score(X_test, y_test)}')
+    # print(f'Lasso test R^2: {lasso.score(X_test, y_test)}')
+
+    # print(f'Ridge predict: {ridge.predict(X_std).mean()}')
+    # print(f'Lasso predict: {lasso.predict(X_std).mean()}')
+
+    # not sure about these
+    # print(f'Ridge predict: {ridge.predict(X_std[0:])}')
+    # print(f'Lasso predict: {lasso.predict(X_std[0:])}')
+
+    # print(f'Ridge RMSLE: {rmsle(y,ridge_predictions)}')
+    # print(f'Lasso RMSLE: {rmsle(y,lasso_predictions)}')
+    #
+    # print(f'Ridge RMSE: {rmse(y,ridge_predictions)}')
+    # print(f'Lasso RMSE: {rmse(y,lasso_predictions)}')
+
+    # print(f'Ridge accuracy: {get_accuracy(y,rounded_ridge)}')
+    # print(f'Lasso accuracy: {get_accuracy(y,rounded_lasso)}')
+
+    # print (rounded_lasso)
 
     nalphas = 50
     min_alpha_exp = -1
@@ -105,5 +135,30 @@ if __name__ == '__main__':
     ax.set_ylabel("$\\beta$")
     ax.legend(loc="upper right")
     plt.savefig('ridge-fig.png')
+    plt.close()
+    # plt.show()
+
+    #plot residuals vs Wins
+    lasso_resids = y - lasso_predictions
+    ridge_resids = y - ridge_predictions
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+    ax1.scatter(lasso_predictions, lasso_resids)
+    ax1.set_xlabel('Predicted Wins - Lasso')
+    ax1.set_ylabel('Residuals')
+    ax1.axhline(0,c='r',linestyle='--')
+    ax2.scatter(ridge_predictions, ridge_resids)
+    ax2.set_xlabel('Predicted Wins - Ridge')
+    # ax2.set_ylabel('Residuals')
+    ax2.axhline(0,c='r',linestyle='--')
+    plt.savefig('residuals.png')
+    plt.close()
+    # plt.show()
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,4))
+    sm.graphics.qqplot(lasso_resids, line='45', fit=True, ax=ax1)
+    ax1.set_title('Lasso QQ')
+    sm.graphics.qqplot(ridge_resids, line='45', fit=True, ax=ax2)
+    ax2.set_title('Ridge QQ')
+    plt.savefig('QQplots.png')
     plt.close()
     # plt.show()
