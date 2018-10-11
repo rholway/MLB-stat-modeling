@@ -8,10 +8,12 @@ import pandas as pd
 from sklearn.preprocessing import scale
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
+
 # HITTING MODEL
 #load in df
 df = pd.read_excel('/Users/ryanholway/Documents/galvanize/capstone_I/data-trials/pitching-and-batting-all.xlsx')
 df.rename(columns={'SO-allowed':'SO-pitched'}, inplace=True)
+
 
 #create hitting df
 hit_df = df.filter(['2B', '3B', 'HR', 'BB','SO'])
@@ -37,8 +39,8 @@ def create_VIF_df(features_list):
     vif["features"] = features_df.columns
     return vif
 
-print(create_VIF_df(hit_cols))
-print(hit_model.summary())
+# print(create_VIF_df(hit_cols))
+# print(hit_model.summary())
 # ============================================================================
 # PITCHING MODEL
 # pitch_df = df.filter(['RA/G', 'ERA', 'CG', 'tSho', 'SV',
@@ -59,8 +61,8 @@ X2 = df[pitch_cols]
 pitch_model = sm.OLS(endog=y, exog=X2).fit()
 
 #find variance inflaction factors between pitching features
-print(create_VIF_df(pitch_cols))
-print(pitch_model.summary())
+# print(create_VIF_df(pitch_cols))
+# print(pitch_model.summary())
 # ============================================================================
 # HITTING PLOTTING
 fig = plt.figure(figsize = (12,8))
@@ -110,7 +112,7 @@ X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
 plt.plot(X_plot, m*X_plot + b, '-', c='r')
 
 # plt.savefig('hit-stats-fig')
-# plt.close()
+plt.close()
 # ============================================================================
 # PITCHING PLOTTING
 fig2 = plt.figure(figsize = (12,8))
@@ -150,5 +152,95 @@ m, b = np.polyfit(pitch_df['SO-pitched'], y, 1)
 X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
 plt.plot(X_plot, m*X_plot + b, '-', c='r')
 
+
 # plt.savefig('pitch-stats-fig')
-# plt.close()
+plt.close()
+
+# ============================================================================
+#additional EDA
+Edf = df.filter(['W','1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','E'])
+Edf['1B'] = df['H'] - df['2B'] - df['3B'] - df['HR']
+wdf = Edf.query('W >= 95')
+ldf = Edf.query('W < 90')
+wy = wdf['W'].values
+ly = ldf['W'].values
+
+winning_singles_mean = np.mean(wdf['1B'])
+losing_singles_mean = np.mean(ldf['1B'])
+
+winning_doubles_mean = np.mean(wdf['2B'])
+losing_doubles_mean = np.mean(ldf['2B'])
+
+winning_HR_mean = np.mean(wdf['HR'])
+losing_HR_mean = np.mean(ldf['HR'])
+
+winning_BB_mean = np.mean(wdf['BB'])
+losing_BB_mean = np.mean(ldf['BB'])
+
+winning_SO_mean = np.mean(wdf['SO'])
+losing_SO_mean = np.mean(ldf['SO'])
+
+winning_Hallowed_mean = np.mean(wdf['H-allowed'])
+losing_Hallowed_mean = np.mean(ldf['H-allowed'])
+
+winning_HRallowed_mean = np.mean(wdf['HR-allowed'])
+losing_HRallowed_mean = np.mean(ldf['HR-allowed'])
+
+winning_BBallowed_mean = np.mean(wdf['BB-allowed'])
+losing_BBallowed_mean = np.mean(ldf['BB-allowed'])
+
+winning_E_mean = np.mean(wdf['E'])
+losing_E_mean = np.mean(ldf['E'])
+
+
+n_groups = 5
+x1 = [winning_singles_mean, winning_doubles_mean, winning_HR_mean, winning_BB_mean, winning_SO_mean]
+y1 = [losing_singles_mean, losing_doubles_mean, losing_HR_mean, losing_BB_mean, losing_SO_mean]
+
+x2 = [winning_Hallowed_mean, winning_HR_mean, winning_BBallowed_mean, winning_E_mean]
+y2 = [losing_Hallowed_mean, losing_HRallowed_mean, losing_BBallowed_mean, losing_E_mean]
+
+fig, ax = plt.subplots()
+index = np.arange(n_groups)
+bar_width = 0.35
+opacity = 0.8
+rects1 = plt.bar(index, x1, bar_width, alpha=opacity, color='b', label='>= 95 Wins')
+rects2 = plt.bar(index+bar_width, y1, bar_width, alpha=opacity, color='g', label='< 95 Wins')
+plt.xlabel('Greater than or equal to 95 wins and less than 95 Wins')
+plt.ylabel('Count')
+plt.title('Winning Teams vs. Losing Teams - Offensive')
+plt.xticks(index + bar_width/2, ('1B', '2B', 'HR', 'BB', 'SO'))
+plt.legend()
+plt.savefig('offensive-comparison.png')
+plt.close()
+
+fig, ax = plt.subplots()
+index = np.arange(4)
+bar_width = 0.35
+opacity = 0.8
+rects1 = plt.bar(index, x2, bar_width, alpha=opacity, color='b', label='>= 95 Wins')
+rects2 = plt.bar(index+bar_width, y2, bar_width, alpha=opacity, color='g', label='< 95 Wins')
+plt.xlabel('Greater than or equal to 95 wins and less than 95 Wins')
+plt.ylabel('Count')
+plt.title('Winning Teams vs. Losing Teams - Pitching / Defense')
+plt.xticks(index + bar_width/2, ('H-allowed', 'HR-allowed', 'BB-allowed', 'E'))
+plt.legend()
+plt.savefig('defensive-comparison.png')
+plt.close()
+
+HR_df = df[['Year', 'HR']]
+# HR_df = HR_df.groupby('Year').agg({'HR':'sum'})
+HR_df = HR_df.groupby('Year').sum().reset_index()
+
+
+# df_grouped1 =  dftest.groupby(['A','Amt']).size().rename('count').reset_index()
+
+fig3 = plt.figure(figsize = (12,8))
+ax1 = fig3.add_subplot(221)
+ax1.scatter(HR_df['Year'], HR_df['HR'])
+ax1.set_ylabel('Total HRs')
+ax1.set_xlabel('Year')
+plt.show()
+
+# print(HR_df.head())
+# print(HR_df.columns)
