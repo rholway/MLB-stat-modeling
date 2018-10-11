@@ -14,6 +14,9 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 df = pd.read_excel('/Users/ryanholway/Documents/galvanize/capstone_I/data-trials/pitching-and-batting-all.xlsx')
 df.rename(columns={'SO-allowed':'SO-pitched'}, inplace=True)
 
+new_df = df.filter(['OPS', 'ERA', 'WHIP'])
+new_df_cols = list(new_df.columns.values)
+
 
 #create hitting df
 hit_df = df.filter(['2B', '3B', 'HR', 'BB','SO'])
@@ -25,19 +28,23 @@ hit_cols = list(hit_df.columns.values)
 y = df['W'].values
 #define features
 X1 = df[hit_cols]
+new_X = df[new_df_cols]
 
 #hitting model
 hit_model = sm.OLS(endog=y, exog=X1).fit()
+new_model = sm.OLS(endog=y, exog=new_X).fit()
 
 #find variance inflation factores between features
 def create_VIF_df(features_list):
     #create new VIF df
     vif = pd.DataFrame()
     features_df = df[features_list]
-    vif["VIF Factor"] = [variance_inflation_factor(features_df.values, i)
-    for i in range(features_df.shape[1])]
+    vif["VIF Factor"] = [variance_inflation_factor(features_df.values, i) for i in range(features_df.shape[1])]
     vif["features"] = features_df.columns
     return vif
+
+print(create_VIF_df(new_df_cols))
+print(new_model.summary())
 
 # print(create_VIF_df(hit_cols))
 # print(hit_model.summary())
@@ -158,6 +165,7 @@ plt.close()
 
 # ============================================================================
 #additional EDA
+#plotting stats of teams with over and under 95 wins
 Edf = df.filter(['W','1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','E'])
 Edf['1B'] = df['H'] - df['2B'] - df['3B'] - df['HR']
 wdf = Edf.query('W >= 95')
@@ -208,10 +216,10 @@ rects1 = plt.bar(index, x1, bar_width, alpha=opacity, color='b', label='>= 95 Wi
 rects2 = plt.bar(index+bar_width, y1, bar_width, alpha=opacity, color='g', label='< 95 Wins')
 plt.xlabel('Greater than or equal to 95 wins and less than 95 Wins')
 plt.ylabel('Count')
-plt.title('Winning Teams vs. Losing Teams - Offensive')
+plt.title('Over vs. Under 95 wins - Offensive')
 plt.xticks(index + bar_width/2, ('1B', '2B', 'HR', 'BB', 'SO'))
 plt.legend()
-plt.savefig('offensive-comparison.png')
+# plt.savefig('offensive-comparison.png')
 plt.close()
 
 fig, ax = plt.subplots()
@@ -222,25 +230,55 @@ rects1 = plt.bar(index, x2, bar_width, alpha=opacity, color='b', label='>= 95 Wi
 rects2 = plt.bar(index+bar_width, y2, bar_width, alpha=opacity, color='g', label='< 95 Wins')
 plt.xlabel('Greater than or equal to 95 wins and less than 95 Wins')
 plt.ylabel('Count')
-plt.title('Winning Teams vs. Losing Teams - Pitching / Defense')
+plt.title('Over vs. Under 95 wins  - Pitching / Defense')
 plt.xticks(index + bar_width/2, ('H-allowed', 'HR-allowed', 'BB-allowed', 'E'))
 plt.legend()
-plt.savefig('defensive-comparison.png')
+# plt.savefig('defensive-comparison.png')
 plt.close()
 
+# Plotting yearly statistics
+
 HR_df = df[['Year', 'HR']]
-# HR_df = HR_df.groupby('Year').agg({'HR':'sum'})
 HR_df = HR_df.groupby('Year').sum().reset_index()
-
-
-# df_grouped1 =  dftest.groupby(['A','Amt']).size().rename('count').reset_index()
-
 fig3 = plt.figure(figsize = (12,8))
 ax1 = fig3.add_subplot(221)
 ax1.scatter(HR_df['Year'], HR_df['HR'])
+ax1.plot(HR_df['Year'], HR_df['HR'])
 ax1.set_ylabel('Total HRs')
 ax1.set_xlabel('Year')
-plt.show()
+ax1.set_xticks(np.arange(1998, 2019, step=5))
+
+
+SO_df = df[['Year', 'SO']]
+SO_df = SO_df.groupby('Year').sum().reset_index()
+ax3 = fig3.add_subplot(223)
+ax3.scatter(SO_df['Year'], SO_df['SO'])
+ax3.plot(SO_df['Year'], SO_df['SO'])
+ax3.set_ylabel('Total SOs')
+ax3.set_xlabel('Year')
+ax3.set_xticks(np.arange(1998, 2019, step=5))
+
+
+R_df = df[['Year', 'R']]
+R_df = R_df.groupby('Year').sum().reset_index()
+ax3 = fig3.add_subplot(222)
+ax3.scatter(R_df['Year'], R_df['R'])
+ax3.plot(R_df['Year'], R_df['R'])
+ax3.set_ylabel('Total Runs')
+ax3.set_xlabel('Year')
+ax3.set_xticks(np.arange(1998, 2019, step=5))
+
+H_df = df[['Year', 'H']]
+H_df = H_df.groupby('Year').sum().reset_index()
+ax4 = fig3.add_subplot(224)
+ax4.scatter(H_df['Year'], H_df['H'])
+ax4.plot(H_df['Year'], H_df['H'])
+ax4.set_ylabel('Total Hits')
+ax4.set_xlabel('Year')
+ax4.set_xticks(np.arange(1998, 2019, step=5))
+plt.savefig('annual-trends.png')
+plt.close()
+# plt.show()
 
 # print(HR_df.head())
 # print(HR_df.columns)

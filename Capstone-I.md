@@ -12,7 +12,7 @@
 # Variance Inflation Factors (VIFs)
 
 <!-- ![VIFfactor](/Users/ryanholway/Documents/galvanize/capstone_I/figures/high-vifs.png) -->
-<img src='figures/high-vifs.png'/>
+<img src='figures/jnb-all-vifs.png'/>
 
 # Eliminate Features
 
@@ -21,7 +21,7 @@
 ###### 1B, 2B, 3B, HR, BB, SO, H-allowed, HR-allowed, BB-allowed, Errors
 
 <!-- ![lessvifs](/Users/ryanholway/Documents/galvanize/capstone_I/figures/less-vifs.png) -->
-<img src='figures/less-vifs.png'/>
+<img src='figures/jnb-some-vifs.png'/>
 
 
 <!-- ![Rsqd-pvals](/Users/ryanholway/Documents/galvanize/capstone_I/figures/rsqd-pvals.png) -->
@@ -39,6 +39,13 @@
 
 <!-- ![pitch-stats](/Users/ryanholway/Documents/galvanize/capstone_I/figures/pitch-stats-fig.png) -->
 <img src='figures/pitch-stats-fig.png'/>
+
+
+### Misc.
+
+<img src='figures/offensive-comparison.png'/>
+
+<img src='figures/annual-trends.png'/>
 
 # Lasso Regression
 
@@ -82,3 +89,17 @@
 
 <!-- ![QQplots](/Users/ryanholway/Documents/galvanize/capstone_I/figures/QQplots.png) -->
 <img src='figures/QQplots.png'/>
+
+# Fill it up again!
+
+#### Re-ran Ridge and Lasso models
+##### Trained on new features (OPS, ERA, WHIP, RBI, E)
+##### Ridge
+- Training R-squared: 0.873
+- Test R-squared: 0.902
+- RMSE: 4.013
+
+##### Lasso
+- Training R-squared: 0.873
+- Test R-squared: 0.902
+- RMSE: 4.010

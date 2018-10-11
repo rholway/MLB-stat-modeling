@@ -44,33 +44,43 @@ if __name__ == '__main__':
     df['1B'] = df['H'] - df['HR'] - df['3B'] - df['2B']
     df1 = df.filter(['1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','E'])
 
-    wdf = df.filter(['W','1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','E'])
-    wdf = wdf.query('W > 95')
-    wdf_x = wdf.drop(['W'], axis=1)
-
     columns = ['1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','SO-pitched','E']
     y = df['W'].values
     X = df1.values
-
-    w_columns = ['1B', '2B', '3B', 'HR', 'BB','SO','H-allowed','HR-allowed','BB-allowed','SO-pitched','E']
-    w_y = wdf['W']
-    w_X = wdf_x.values
     #standardize data
     standardizer = StandardScaler()
     X_std = standardizer.fit_transform(X)
     #test train split from standardized data
     X_train, X_test, y_train, y_test = train_test_split(X_std, y, random_state=42)
 
-    w_X_std = standardizer.fit_transform(w_X)
+    # ridge = make_ridge(X_train, y_train)
+    # lasso = make_lasso(X_train, y_train)
+    #
+    # ridge_predictions = ridge.predict(X_std)
+    # lasso_predictions = lasso.predict(X_std)
+
+
+    new_df = df.filter(['OPS', 'ERA', 'WHIP', 'RBI', 'E'])
+    new_cols = ['OPS', 'ERA', 'WHIP', 'RBI', 'E']
+    new_X = new_df.values
+    new_X_std = standardizer.fit_transform(new_X)
+    new_Xtrain, new_Xtest, new_ytrain, new_ytest = train_test_split(new_X_std, y, random_state=42)
+
+    new_ridge = make_ridge(new_Xtrain, new_ytrain)
+    new_lasso = make_lasso(new_Xtrain, new_ytrain)
+
+    new_ridge_predictions = new_ridge.predict(new_X_std)
+    new_lasso_predictions = new_lasso.predict(new_X_std)
+
+    print(f'Ridge RMSE: {rmse(y,new_ridge_predictions)}')
+    print(f'Lasso RMSE: {rmse(y,new_lasso_predictions)}')
+
+    print(f'Ridge test R^2: {new_ridge.score(new_Xtest, new_ytest)}')
+    print(f'Lasso test R^2: {new_lasso.score(new_Xtest, new_ytest)}')
 
 
 
 
-    ridge = make_ridge(X_train, y_train)
-    lasso = make_lasso(X_train, y_train)
-
-    ridge_predictions = ridge.predict(X_std)
-    lasso_predictions = lasso.predict(X_std)
 
     # print(f'Ridge test R^2: {ridge.score(X_test, y_test)}')
     # print(f'Lasso test R^2: {lasso.score(X_test, y_test)}')
@@ -91,85 +101,86 @@ if __name__ == '__main__':
     # print(f'Ridge accuracy: {get_accuracy(y,rounded_ridge)}')
     # print(f'Lasso accuracy: {get_accuracy(y,rounded_lasso)}')
 
-    print(wdf.shape)
 
 
-    nalphas = 50
-    min_alpha_exp = -1
-    max_alpha_exp = 3.5
-    nfeatures = 10
-    coefs = np.zeros((nalphas, nfeatures))
-    alphas = np.logspace(min_alpha_exp, max_alpha_exp, nalphas)
-    for i, alpha in enumerate(alphas):
-        #model = Pipeline([('standardize', StandardScaler()),
-        #                  ('lasso', Lasso(alpha=alpha))])
-        model = Lasso(alpha=alpha)
-        model.fit(X, y)
-        #coefs[i] = model.steps[1][1].coef_
-        coefs[i] = model.coef_
-
-    fig, ax = plt.subplots(figsize=(10,5))
-    for feature, color in zip(range(nfeatures),
-                              ['r','g','b','c','m','k','y','b','r','g']):
-        plt.plot(alphas, coefs[:, feature],
-                 color=color,
-                 label="$\\beta_{{{}}}$".format(columns[feature]))
-    ax.set_xscale('log')
-    ax.set_title("$\\beta$ as a function of $\\alpha$ for LASSO regression")
-    ax.set_xlabel("$\\alpha$")
-    ax.set_ylabel("$\\beta$")
-    ax.legend(loc="right")
-    plt.savefig('lasso-fig.png')
-    plt.close()
 
 
-    nalphas_ridge = 50
-    min_alpha_exp_ridge = 0
-    max_alpha_exp_ridge = 10
-    coefs_ridge = np.zeros((nalphas_ridge, nfeatures))
-    alphas_ridge = np.logspace(min_alpha_exp_ridge, max_alpha_exp_ridge, nalphas_ridge)
-    for i, alpha in enumerate(alphas_ridge):
-        model = Ridge(alpha=alpha)
-        model.fit(X, y)
-        coefs_ridge[i] = model.coef_
-
-    fig, ax = plt.subplots(figsize=(10,5))
-    for feature, color in zip(range(nfeatures),
-                              ['r','g','b','c','m','k','y','b','r','g']):
-        plt.plot(alphas_ridge, coefs_ridge[:, feature],
-                 color=color,
-                 label="$\\beta_{{{}}}$".format(columns[feature]))
-
-    ax.set_xscale('log')
-    ax.set_title("$\\beta$ as a function of $\\alpha$ for Ridge regression")
-    ax.set_xlabel("$\\alpha$")
-    ax.set_ylabel("$\\beta$")
-    ax.legend(loc="upper right")
-    plt.savefig('ridge-fig.png')
-    plt.close()
-    # plt.show()
-
-    #plot residuals vs Wins
-    lasso_resids = y - lasso_predictions
-    ridge_resids = y - ridge_predictions
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-    ax1.scatter(lasso_predictions, lasso_resids)
-    ax1.set_xlabel('Predicted Wins - Lasso')
-    ax1.set_ylabel('Residuals')
-    ax1.axhline(0,c='r',linestyle='--')
-    ax2.scatter(ridge_predictions, ridge_resids)
-    ax2.set_xlabel('Predicted Wins - Ridge')
-    # ax2.set_ylabel('Residuals')
-    ax2.axhline(0,c='r',linestyle='--')
-    plt.savefig('residuals.png')
-    plt.close()
-    # plt.show()
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,4))
-    sm.graphics.qqplot(lasso_resids, line='45', fit=True, ax=ax1)
-    ax1.set_title('Lasso QQ')
-    sm.graphics.qqplot(ridge_resids, line='45', fit=True, ax=ax2)
-    ax2.set_title('Ridge QQ')
-    plt.savefig('QQplots.png')
-    plt.close()
-    # plt.show()
+    # nalphas = 50
+    # min_alpha_exp = -1
+    # max_alpha_exp = 3.5
+    # nfeatures = 10
+    # coefs = np.zeros((nalphas, nfeatures))
+    # alphas = np.logspace(min_alpha_exp, max_alpha_exp, nalphas)
+    # for i, alpha in enumerate(alphas):
+    #     #model = Pipeline([('standardize', StandardScaler()),
+    #     #                  ('lasso', Lasso(alpha=alpha))])
+    #     model = Lasso(alpha=alpha)
+    #     model.fit(X, y)
+    #     #coefs[i] = model.steps[1][1].coef_
+    #     coefs[i] = model.coef_
+    #
+    # fig, ax = plt.subplots(figsize=(10,5))
+    # for feature, color in zip(range(nfeatures),
+    #                           ['r','g','b','c','m','k','y','b','r','g']):
+    #     plt.plot(alphas, coefs[:, feature],
+    #              color=color,
+    #              label="$\\beta_{{{}}}$".format(columns[feature]))
+    # ax.set_xscale('log')
+    # ax.set_title("$\\beta$ as a function of $\\alpha$ for LASSO regression")
+    # ax.set_xlabel("$\\alpha$")
+    # ax.set_ylabel("$\\beta$")
+    # ax.legend(loc="right")
+    # # plt.savefig('lasso-fig.png')
+    # plt.close()
+    #
+    #
+    # nalphas_ridge = 50
+    # min_alpha_exp_ridge = 0
+    # max_alpha_exp_ridge = 10
+    # coefs_ridge = np.zeros((nalphas_ridge, nfeatures))
+    # alphas_ridge = np.logspace(min_alpha_exp_ridge, max_alpha_exp_ridge, nalphas_ridge)
+    # for i, alpha in enumerate(alphas_ridge):
+    #     model = Ridge(alpha=alpha)
+    #     model.fit(X, y)
+    #     coefs_ridge[i] = model.coef_
+    #
+    # fig, ax = plt.subplots(figsize=(10,5))
+    # for feature, color in zip(range(nfeatures),
+    #                           ['r','g','b','c','m','k','y','b','r','g']):
+    #     plt.plot(alphas_ridge, coefs_ridge[:, feature],
+    #              color=color,
+    #              label="$\\beta_{{{}}}$".format(columns[feature]))
+    #
+    # ax.set_xscale('log')
+    # ax.set_title("$\\beta$ as a function of $\\alpha$ for Ridge regression")
+    # ax.set_xlabel("$\\alpha$")
+    # ax.set_ylabel("$\\beta$")
+    # ax.legend(loc="upper right")
+    # # plt.savefig('ridge-fig.png')
+    # plt.close()
+    # # plt.show()
+    #
+    # #plot residuals vs Wins
+    # lasso_resids = y - lasso_predictions
+    # ridge_resids = y - ridge_predictions
+    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+    # ax1.scatter(lasso_predictions, lasso_resids)
+    # ax1.set_xlabel('Predicted Wins - Lasso')
+    # ax1.set_ylabel('Residuals')
+    # ax1.axhline(0,c='r',linestyle='--')
+    # ax2.scatter(ridge_predictions, ridge_resids)
+    # ax2.set_xlabel('Predicted Wins - Ridge')
+    # # ax2.set_ylabel('Residuals')
+    # ax2.axhline(0,c='r',linestyle='--')
+    # # plt.savefig('residuals.png')
+    # plt.close()
+    # # plt.show()
+    #
+    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,4))
+    # sm.graphics.qqplot(lasso_resids, line='45', fit=True, ax=ax1)
+    # ax1.set_title('Lasso QQ')
+    # sm.graphics.qqplot(ridge_resids, line='45', fit=True, ax=ax2)
+    # ax2.set_title('Ridge QQ')
+    # # plt.savefig('QQplots.png')
+    # plt.close()
+    # # plt.show()
