@@ -1,6 +1,6 @@
 # Capstone I
 
-# Analyzing MLB statistics to predict wins
+# Analyzing MLB Statistics to Predict Wins
 
 ### - 30 teams in MLB since 1998
 ### - Took team statistics from 1998 until 2018
@@ -9,9 +9,13 @@
 ###### - Team, Year, Wins, Losses, R/G, PA, AB, R, H, 2B, 3B, HR, RBI, SB, BB, OBP, SLG, OPS, RA/G, ERA, H-allowed, SO-pitched, WHIP, etc.
 ### - Goal: Predict number of wins for a team in a season based on stats from above
 
+Data Source: https://www.baseball-reference.com/
+
 # Variance Inflation Factors (VIFs)
 
-<!-- ![VIFfactor](/Users/ryanholway/Documents/galvanize/capstone_I/figures/high-vifs.png) -->
+- Set 'wins' as my target. Compared all my potential features to analyze which statistics to include in my model.
+
+
 <img src='figures/jnb-all-vifs.png'/>
 
 # Eliminate Features

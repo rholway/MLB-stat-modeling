@@ -20,8 +20,6 @@ df3 = df.filter(['R/G', 'G', 'PA', 'AB', 'R', '2B',
        'E', 'DP', 'Fld%', 'RA/G', 'ERA', 'H-allowed', 'R-allowed', 'ER-allowed', 'HR-allowed', 'BB-allowed',
        'SO-allowed', 'WHIP','1B'])
 
-#make average age column
-# df['AvAge'] = (df['BatAge'] + df['PAge']) / 2
 
 #start dropping columns
 # df_h = df.drop(['Team','L','R','Year', '3B','CS', 'Finish',
@@ -95,3 +93,136 @@ new_model_2 = sm.OLS(endog=y, exog=X2).fit()
 # print(create_VIF_df(col_list_1))
 print(df.columns)
 # print(df3.columns)
+
+#QQ subplots
+# fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,4))
+# sm.graphics.qqplot(lasso_resids, line='45', fit=True, ax=ax1)
+# ax1.set_title('Lasso QQ')
+# sm.graphics.qqplot(ridge_resids, line='45', fit=True, ax=ax2)
+# ax2.set_title('Ridge QQ')
+# # plt.savefig('QQplots.png')
+# plt.close()
+
+#create hitting df
+hit_df = df.filter(['2B', '3B', 'HR', 'BB','SO'])
+
+#hitting column list
+hit_cols = list(hit_df.columns.values)
+
+pitch_df = df.filter(['H-allowed', 'HR-allowed', 'BB-allowed', 'SO-pitched'])
+
+#pitching column list
+pitch_cols = list(pitch_df.columns.values)
+
+# define target
+y = df['W'].values
+#define features
+X2 = df[pitch_cols]
+
+#hitting model
+pitch_model = sm.OLS(endog=y, exog=X2).fit()
+
+
+
+# ============================================================================
+# HITTING PLOTTING
+
+
+
+
+
+# fig = plt.figure(figsize = (12,8))
+# ax1 = fig.add_subplot(231)
+# ax1.scatter(y, df1['2B'])
+# ax1.set_ylabel('Team Doubles per Year')
+# ax1.set_xlabel('Team Wins per Year')
+# axes = plt.gca()
+# m, b = np.polyfit(y,df1['2B'], 1)
+# X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
+# plt.plot(X_plot, m*X_plot + b, '-', c='r')
+#
+#
+# ax2 = fig.add_subplot(232)
+# ax2.scatter(y, df1['3B'])
+# ax2.set_ylabel('Team Triples per Year')
+# ax2.set_xlabel('Team Wins per Year')
+# axes = plt.gca()
+# m, b = np.polyfit(y, df1['3B'],  1)
+# X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
+# plt.plot(X_plot, m*X_plot + b, '-', c='r')
+# plt.show()
+#
+# ax3 = fig.add_subplot(233)
+# ax3.scatter(hit_df['HR'], y)
+# # ax2.set_ylabel('Team Wins per Year')
+# ax3.set_xlabel('Team Home Runs per Year')
+# axes = plt.gca()
+# m, b = np.polyfit(hit_df['HR'], y, 1)
+# X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
+# plt.plot(X_plot, m*X_plot + b, '-', c='r')
+#
+# ax4 = fig.add_subplot(234)
+# ax4.scatter(hit_df['BB'], y)
+# ax4.set_ylabel('Team Wins per Year')
+# ax4.set_xlabel('Team Walks per Year')
+# axes = plt.gca()
+# m, b = np.polyfit(hit_df['BB'], y, 1)
+# X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
+# plt.plot(X_plot, m*X_plot + b, '-', c='r')
+#
+# ax5 = fig.add_subplot(235)
+# ax5.scatter(hit_df['SO'], y)
+# # ax5.set_ylabel('Team Wins per Year')
+# ax5.set_xlabel('Team Strikeouts per Year')
+# axes = plt.gca()
+# m, b = np.polyfit(hit_df['SO'], y, 1)
+# X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
+# plt.plot(X_plot, m*X_plot + b, '-', c='r')
+#
+# # plt.savefig('hit-stats-fig')
+# plt.close()
+
+
+
+# # ============================================================================
+# # PITCHING PLOTTING
+# fig2 = plt.figure(figsize = (12,8))
+# ax1 = fig2.add_subplot(221)
+# ax1.scatter(pitch_df['H-allowed'], y)
+# ax1.set_ylabel('Team Wins per Year')
+# ax1.set_xlabel('Team Hits Allowed per Year')
+# axes = plt.gca()
+# m, b = np.polyfit(pitch_df['H-allowed'], y, 1)
+# X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
+# plt.plot(X_plot, m*X_plot + b, '-', c='r')
+#
+# ax2 = fig2.add_subplot(222)
+# ax2.scatter(pitch_df['HR-allowed'], y)
+# # ax2.set_ylabel('Team Wins per Year')
+# ax2.set_xlabel('Team Home Runs Allowed per Year')
+# axes = plt.gca()
+# m, b = np.polyfit(pitch_df['HR-allowed'], y, 1)
+# X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
+# plt.plot(X_plot, m*X_plot + b, '-', c='r')
+#
+# ax3 = fig2.add_subplot(223)
+# ax3.scatter(pitch_df['BB-allowed'], y)
+# ax3.set_ylabel('Team Wins per Year')
+# ax3.set_xlabel('Team Walks Allowed per Year')
+# axes = plt.gca()
+# m, b = np.polyfit(pitch_df['BB-allowed'], y, 1)
+# X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
+# plt.plot(X_plot, m*X_plot + b, '-', c='r')
+#
+# ax4 = fig2.add_subplot(224)
+# ax4.scatter(pitch_df['SO-pitched'], y)
+# # ax4.set_ylabel('Team Wins per Year')
+# ax4.set_xlabel('Team Strikeouts Pitched per Year')
+# axes = plt.gca()
+# m, b = np.polyfit(pitch_df['SO-pitched'], y, 1)
+# X_plot = np.linspace(axes.get_xlim()[0],axes.get_xlim()[1],100)
+# plt.plot(X_plot, m*X_plot + b, '-', c='r')
+
+#
+# # plt.savefig('pitch-stats-fig')
+# plt.close()
