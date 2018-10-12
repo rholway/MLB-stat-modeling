@@ -99,11 +99,13 @@ if __name__ == '__main__':
     wy = wdf['W'].values
     ly = ldf['W'].values
 
-def split_team_data(df_col, win_split):
-    '''
-    df_col: df.Series - column of desired information
-    win_split: int - 
-    '''
+
+
+# def split_team_data(df_col, win_split):
+#     '''
+#     df_col: df.Series - column of desired information
+#     win_split: int -
+#     '''
 #
 # winning_singles_mean = np.mean(wdf['1B'])
 # losing_singles_mean = np.mean(ldf['1B'])

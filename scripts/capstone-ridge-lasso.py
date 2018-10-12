@@ -19,13 +19,13 @@ import operator
 def make_lasso(X, y, cv=10):
     alphas = np.logspace(-3,3,50)
     lasso = LassoCV(alphas=alphas, cv=cv).fit(X,y)
-    print(f'Lasso train R^2: {lasso.score(X,y)}, alpha: {lasso.alpha_}')
+    # print(f'Lasso train R^2: {lasso.score(X,y)}, alpha: {lasso.alpha_}')
     return lasso
 
 def make_ridge(X, y, cv=10):
     alphas = np.logspace(-3,3,50)
     ridge = RidgeCV(alphas=alphas, cv=cv).fit(X,y)
-    print(f'Ridge train R^2: {ridge.score(X,y)}, alpha: {ridge.alpha_}')
+    # print(f'Ridge train R^2: {ridge.score(X,y)}, alpha: {ridge.alpha_}')
     return ridge
 
 def rmsle(y_actual, y_predicted):
@@ -58,14 +58,14 @@ def make_lasso_plot(nalphas, min_alpha_exp, max_alpha_exp, nfeatures, X, y):
                               ['r','g','b','c','m','k','y','b','r','g']):
         plt.plot(alphas, coefs[:, feature],
                  color=color,
-                 label="$\\beta_{{{}}}$".format(columns[feature]))
+                 label="$\\beta_{{{}}}$".format(columns[feature]))#Jane says: wowza formatting {{{}}}!
     ax.set_xscale('log')
     ax.set_title("$\\beta$ as a function of $\\alpha$ for LASSO regression")
     ax.set_xlabel("$\\alpha$")
     ax.set_ylabel("$\\beta$")
     ax.legend(loc="right")
     # plt.savefig()
-    plt.close()
+    plt.show()
 
 def make_ridge_plot(nalphas, min_alpha_exp, max_alpha_exp, nfeatures, X, y):
     '''
@@ -87,6 +87,8 @@ def make_ridge_plot(nalphas, min_alpha_exp, max_alpha_exp, nfeatures, X, y):
     fig, ax = plt.subplots(figsize=(10,5))
     for feature, color in zip(range(nfeatures),
                               ['r','g','b','c','m','k','y','b','r','g']):
+                              #Jane says: Is it problematic that there are two of some of the colors in thsi list?
+                              # Would it be appropriate to iterate through a for-loop of colors?
         plt.plot(alphas, coefs[:, feature],
                  color=color,
                  label="$\\beta_{{{}}}$".format(columns[feature]))
@@ -148,6 +150,8 @@ if __name__ == '__main__':
     ridge_predictions = ridge.predict(X_std)
     lasso_predictions = lasso.predict(X_std)
 
+    # make_lasso_plot(50, -3, 3, 10, X_std, y)
+
     # Various print statements from the model
     # print(f'Ridge test R^2: {ridge.score(X_test, y_test)}')
     # print(f'Lasso test R^2: {lasso.score(X_test, y_test)}')
@@ -175,11 +179,40 @@ if __name__ == '__main__':
     new_lasso_predictions = new_lasso.predict(new_X_std)
 
     # Various print statements from the new model
-    # print(f'Ridge RMSE: {rmse(y,new_ridge_predictions)}')
-    # print(f'Lasso RMSE: {rmse(y,new_lasso_predictions)}')
+    print(f'Ridge RMSE: {rmse(y,new_ridge_predictions)}')
+    print(f'Lasso RMSE: {rmse(y,new_lasso_predictions)}')
     #
-    # print(f'Ridge test R^2: {new_ridge.score(new_Xtest, new_ytest)}')
-    # print(f'Lasso test R^2: {new_lasso.score(new_Xtest, new_ytest)}')
+    print(f'Ridge test R^2: {new_ridge.score(new_Xtest, new_ytest)}')
+    print(f'Lasso test R^2: {new_lasso.score(new_Xtest, new_ytest)}')
+
+    df_2018_true = df[0::21].filter('W')
+    arr_2018_true = df_2018_true.values
+    arr_2018_predict = new_lasso_predictions[0::21]
+    print(df['Team'].unique())
+    my_xticks = ['Cubs' 'Brewers' 'Cardinals' 'Pirates' 'Reds' 'Braves' 'Nationals'
+ 'Phillies' 'Mets' 'Marlins' 'Dodgers' 'Rockies' 'D-backs' 'Giants'
+ 'Padres' 'Red Sox' 'Yankees' 'Rays' 'Blue Jays' 'Orioles' 'Indians'
+ 'Twins' 'Tigers' 'White Sox' 'Royals' 'Astros' 'Athletics' 'Mariners'
+ 'Rangers' 'Angles']
+
+    plt.plot(arr_2018_true, c='r', label='Actual')
+    plt.plot(arr_2018_predict, c='b', label='Predicted')
+    plt.xlabel('Teams')
+    plt.ylabel('Wins')
+    plt.title('Predicted Wins from Lasso Model vs. Actual Wins for 2018')
+    plt.legend()
+    plt.savefig('2018actvspred.png')
+    # plt.show()
+    plt.close()
+
+
+
+
+
+
+
+
+
 
 
     # print(make_QQ_plot(y, new_ridge_predictions))

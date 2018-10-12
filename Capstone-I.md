@@ -98,12 +98,7 @@ Data Source: https://www.baseball-reference.com/
 
 #### Re-ran Ridge and Lasso models
 ##### Trained on new features (OPS, ERA, WHIP, RBI, E)
-##### Ridge
-- Training R-squared: 0.873
-- Test R-squared: 0.902
-- RMSE: 4.013
-
-##### Lasso
-- Training R-squared: 0.873
-- Test R-squared: 0.902
-- RMSE: 4.010
+##### Ridge / Lasso
+- Training R-squared: 0.873 / 0.873
+- Test R-squared: 0.902 / 0.902
+- RMSE: 4.013 / 4.010
