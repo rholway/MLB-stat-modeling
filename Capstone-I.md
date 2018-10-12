@@ -16,7 +16,7 @@ Data Source: https://www.baseball-reference.com/
 - Set 'wins' as my target. Compared all my potential features to analyze which statistics to include in my model.
 
 
-<img src='figures/jnb-all-vifs.png'/>
+<img src='figures/jnb-all-vifs.png' width='100' height='100'/>
 
 # Eliminate Features
 
@@ -24,24 +24,24 @@ Data Source: https://www.baseball-reference.com/
 
 ###### 1B, 2B, 3B, HR, BB, SO, H-allowed, HR-allowed, BB-allowed, Errors
 
-<!-- ![lessvifs](/Users/ryanholway/Documents/galvanize/capstone_I/figures/less-vifs.png) -->
-<img src='figures/jnb-some-vifs.png'/>
+
+<img src='figures/jnb-some-vifs.png' width='100' height='100'/>
 
 
-<!-- ![Rsqd-pvals](/Users/ryanholway/Documents/galvanize/capstone_I/figures/rsqd-pvals.png) -->
-<img src='figures/rsqd-pvals.png'/>
+
+<img src='figures/rsqd-pvals.png' width='100' height='100'/>
 
 # EDA
 
 ### Offensive stats
 
-<!-- ![hit-stats](/Users/ryanholway/Documents/galvanize/capstone_I/figures/hit-stats-fig.png) -->
+
 <img src='figures/hit-stats-fig.png'/>
 
 
 ### Defensive / Pitching stats
 
-<!-- ![pitch-stats](/Users/ryanholway/Documents/galvanize/capstone_I/figures/pitch-stats-fig.png) -->
+
 <img src='figures/pitch-stats-fig.png'/>
 
 
@@ -57,7 +57,7 @@ Data Source: https://www.baseball-reference.com/
 ##### Training best alpha: 0.002
 ##### Test R-squared: 0.822
 
-<!-- ![lasso-fig](/Users/ryanholway/Documents/galvanize/capstone_I/figures/lasso-fig.png) -->
+
 <img src='figures/lasso-fig.png'/>
 
 # Ridge Regression
@@ -66,7 +66,7 @@ Data Source: https://www.baseball-reference.com/
 ##### Training best alpha: 8.286
 ##### Test R-squared: 0.821
 
-<!-- ![ridge-fig](/Users/ryanholway/Documents/galvanize/capstone_I/figures/ridge-fig.png) -->
+
 <img src='figures/ridge-fig.png'/>
 
 # Predicted vs. Actual
@@ -85,13 +85,13 @@ Data Source: https://www.baseball-reference.com/
 
 ##### Scatter plot of predicted wins and residuals
 
-<!-- ![residuals](/Users/ryanholway/Documents/galvanize/capstone_I/figures/residuals.png) -->
+
 <img src='figures/residuals.png'/>
 
 
 #### QQ plots
 
-<!-- ![QQplots](/Users/ryanholway/Documents/galvanize/capstone_I/figures/QQplots.png) -->
+
 <img src='figures/QQplots.png'/>
 
 # Fill it up again!
@@ -102,3 +102,5 @@ Data Source: https://www.baseball-reference.com/
 - Training R-squared: 0.873 / 0.873
 - Test R-squared: 0.902 / 0.902
 - RMSE: 4.013 / 4.010
+
+<img src='figures/2018actvspred1.png'/>

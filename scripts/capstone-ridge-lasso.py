@@ -194,14 +194,23 @@ if __name__ == '__main__':
  'Padres' 'Red Sox' 'Yankees' 'Rays' 'Blue Jays' 'Orioles' 'Indians'
  'Twins' 'Tigers' 'White Sox' 'Royals' 'Astros' 'Athletics' 'Mariners'
  'Rangers' 'Angles']
+    index = np.arange(4)
+    bar_width = 0.35
 
+    plt.rcParams['figure.figsize'] = 10, 5
     plt.plot(arr_2018_true, c='r', label='Actual')
     plt.plot(arr_2018_predict, c='b', label='Predicted')
     plt.xlabel('Teams')
     plt.ylabel('Wins')
+    plt.xticks(np.arange(30), ('Cubs', 'Brewers', 'Cardinals', 'Pirates', 'Reds',
+    'Braves', 'Nationals', 'Phillies', 'Mets', 'Marlins', 'Dodgers', 'Rockies',
+     'D-backs', 'Giants', 'Padres', 'Red Sox', 'Yankees', 'Rays', 'Blue Jays',
+     'Orioles', 'Indians', 'Twins', 'Tigers', 'White Sox', 'Royals', 'Astros',
+      'Athletics', 'Mariners', 'Rangers', 'Angles'), rotation=45)
     plt.title('Predicted Wins from Lasso Model vs. Actual Wins for 2018')
     plt.legend()
-    plt.savefig('2018actvspred.png')
+    plt.tight_layout()
+    plt.savefig('2018actvspred1.png')
     # plt.show()
     plt.close()
 
