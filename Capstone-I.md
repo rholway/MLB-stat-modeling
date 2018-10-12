@@ -29,7 +29,7 @@ Data Source: https://www.baseball-reference.com/
 
 
 
-<img src='figures/rsqd-pvals.png' width='600' height='400'/>
+<img src='figures/rsqd-pvals.png' width='800' height='540'/>
 
 # EDA
 
