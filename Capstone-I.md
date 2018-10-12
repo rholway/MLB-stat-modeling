@@ -25,11 +25,11 @@ Data Source: https://www.baseball-reference.com/
 ###### 1B, 2B, 3B, HR, BB, SO, H-allowed, HR-allowed, BB-allowed, Errors
 
 
-<img src='figures/jnb-some-vifs.png' width='600' height='600'/>
+<img src='figures/jnb-some-vifs.png' width='400' height='400'/>
 
 
 
-<img src='figures/rsqd-pvals.png' width='100' height='100'/>
+<img src='figures/rsqd-pvals.png' width='400' height='400'/>
 
 # EDA
 
