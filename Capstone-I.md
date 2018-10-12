@@ -16,7 +16,7 @@ Data Source: https://www.baseball-reference.com/
 - Set 'wins' as my target. Compared all my potential features to analyze which statistics to include in my model.
 
 
-<img src='figures/jnb-all-vifs.png' width='1000' height='1000'/>
+<img src='figures/jnb-all-vifs.png' width='300' height='400'/>
 
 # Eliminate Features
 
