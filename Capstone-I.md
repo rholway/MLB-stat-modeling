@@ -16,7 +16,7 @@ Data Source: https://www.baseball-reference.com/
 - Set 'wins' as my target. Compared all my potential features to analyze which statistics to include in my model.
 
 
-<img src='figures/jnb-all-vifs.png' width='400' height='600'/>
+<p align="center"><img src='figures/jnb-all-vifs.png' width='400' height='600'/>
 
 # Eliminate Features
 
@@ -25,31 +25,31 @@ Data Source: https://www.baseball-reference.com/
 ###### 1B, 2B, 3B, HR, BB, SO, H-allowed, HR-allowed, BB-allowed, Errors
 
 
-<img src='figures/jnb-some-vifs.png' width='450' height='400'/>
+<p align="center"><img src='figures/jnb-some-vifs.png' width='450' height='400'/>
 
 
 
-<img src='figures/rsqd-pvals.png' width='800' height='540'/>
+<p align="center"><img src='figures/rsqd-pvals.png' width='800' height='540'/>
 
 # EDA
 
 ### Offensive stats
 
 
-<img src='figures/hit-stats-fig.png'/>
+<p align="center"><img src='figures/hit-stats-fig.png'/>
 
 
 ### Defensive / Pitching stats
 
 
-<img src='figures/pitch-stats-fig.png'/>
+<p align="center"><img src='figures/pitch-stats-fig.png'/>
 
 
 ### Misc.
 
-<img src='figures/offensive-comparison.png'/>
+<p align="center"><img src='figures/offensive-comparison.png'/>
 
-<img src='figures/annual-trends.png'/>
+<p align="center"><img src='figures/annual-trends.png'/>
 
 # Lasso Regression
 
@@ -58,7 +58,7 @@ Data Source: https://www.baseball-reference.com/
 ##### Test R-squared: 0.822
 
 
-<img src='figures/lasso-fig.png'/>
+<p align="center"><img src='figures/lasso-fig.png'/>
 
 # Ridge Regression
 
@@ -67,7 +67,7 @@ Data Source: https://www.baseball-reference.com/
 ##### Test R-squared: 0.821
 
 
-<img src='figures/ridge-fig.png'/>
+<p align="center"><img src='figures/ridge-fig.png'/>
 
 # Predicted vs. Actual
 
@@ -86,13 +86,13 @@ Data Source: https://www.baseball-reference.com/
 ##### Scatter plot of predicted wins and residuals
 
 
-<img src='figures/residuals.png'/>
+<p align="center"><img src='figures/residuals.png'/>
 
 
 #### QQ plots
 
 
-<img src='figures/QQplots.png'/>
+<p align="center"><img src='figures/QQplots.png'/>
 
 # Fill it up again!
 
@@ -103,4 +103,4 @@ Data Source: https://www.baseball-reference.com/
 - Test R-squared: 0.902 / 0.902
 - RMSE: 4.013 / 4.010
 
-<img src='figures/2018actvspred1.png'/>
+<p align="center"><img src='figures/2018actvspred1.png'/>
