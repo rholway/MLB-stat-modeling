@@ -11,12 +11,16 @@
 
 Data Source: https://www.baseball-reference.com/
 
+Analyze stats from the last 21 years and create a machine learning model to train on the stats and the number of wins for each team.  Test the model to predict wins for each year based on the same statistics.
+
 # Variance Inflation Factors (VIFs)
 
 - Set 'wins' as my target. Compared all my potential features to analyze which statistics to include in my model.
 
 
 <p align="center"><img src='figures/jnb-all-vifs.png' width='350' height='600'/>
+
+Large VIF scores displaying colinearity between features.  Need to eliminate features in order to create a better model.
 
 # Eliminate Features
 
@@ -26,6 +30,8 @@ Data Source: https://www.baseball-reference.com/
 
 
 <p align="center"><img src='figures/jnb-some-vifs.png' width='450' height='400'/>
+
+End up with ten features.  Although the features still 
 
 
 
