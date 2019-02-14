@@ -31,13 +31,16 @@ Large VIF scores displaying colinearity between features.  Need to eliminate fea
 
 <p align="center"><img src='figures/jnb-some-vifs.png' width='450' height='400'/>
 
-End up with ten features.  Although the features still 
+End up with ten features.  Although the features still have large VIF scores, it is more representative for the model.
 
 
 
 <p align="center"><img src='figures/rsqd-pvals.png' width='800' height='540'/>
 
+With an R-squared score close to 1.0, this model explains the majority of the response data around its mean.  Coefficients with P>|t| values of 0.00 mean each of those coefficients is very significant.  Higher P>|t| values mean the coefficients are less significant.
+
 # EDA
+Below are team statistics for each of the 30 MLB teams over 21 years (630 observations)
 
 ### Offensive stats
 
@@ -53,11 +56,19 @@ End up with ten features.  Although the features still
 
 ### Misc.
 
+Teams winning 95 or more games will likely advance to the post season, while teams winning less than 95 games are not as likely to advance.  For this reason, I broke up the teams into two categories (teams winning more than or equal to 95 games and teams winning less than 95 games).  I then compared major offensive statistics between the two categories and created a visualization.
+
 <p align="center"><img src='figures/offensive-comparison.png'/>
+
+##### The visualizations below compare cumulative league statistics for each season over the past 21 seasons (offensive).
 
 <p align="center"><img src='figures/annual-trends.png'/>
 
-# Lasso Regression
+# Regularization
+
+Regularization is adding information to the model to prevent overfitting, reduce co-linearity, and adjust the bias/variance trade-off.  I experimented with L1 Regularization (LASSO) and L2 Regularization (Ridge)
+
+## LASSO Regression
 
 ##### Training R-squared: 0.812
 ##### Training best alpha: 0.002
@@ -66,7 +77,7 @@ End up with ten features.  Although the features still
 
 <p align="center"><img src='figures/lasso-fig.png'/>
 
-# Ridge Regression
+## Ridge Regression
 
 ##### Training R-squared: 0.812
 ##### Training best alpha: 8.286
@@ -91,16 +102,19 @@ End up with ten features.  Although the features still
 
 ##### Scatter plot of predicted wins and residuals
 
+These plots show homoscedasticity, which means our residuals are normally distributed, which is an important assumption behind linear regression.
+
 
 <p align="center"><img src='figures/residuals.png'/>
 
 
 #### QQ plots
 
+The linearity of the points show the data are normally distributed.
 
 <p align="center"><img src='figures/QQplots.png'/>
 
-# Fill it up again!
+# Can we do better?
 
 #### Re-ran Ridge and Lasso models
 ##### Trained on new features (OPS, ERA, WHIP, RBI, E)
@@ -108,5 +122,9 @@ End up with ten features.  Although the features still
 - Training R-squared: 0.873 / 0.873
 - Test R-squared: 0.902 / 0.902
 - RMSE: 4.013 / 4.010
+
+RMSE of approximately four means the model was able to predict how many games a team would win in a season, and the prediction was usually off by four games.  Considering teams play 162 games in a year, this is pretty impressive!
+
+### My model's predictions vs. actual wins of teams for the 2018 season.
 
 <p align="center"><img src='figures/2018actvspred1.png'/>
