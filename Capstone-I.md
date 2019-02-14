@@ -56,7 +56,7 @@ Below are team statistics for each of the 30 MLB teams over 21 years (630 observ
 
 ### Misc.
 
-Teams winning 95 or more games will likely advance to the post season, while teams winning less than 95 games are not as likely to advance.  For this reason, I broke up the teams into two categories (teams winning more than or equal to 95 games and teams winning less than 95 games).  I then compared major offensive statistics between the two categories and created a visualization.
+Teams winning 95 or more games will likely advance to the postseason, while teams winning less than 95 games are not as likely to advance.  For this reason, I broke up the teams into two categories (teams winning more than or equal to 95 games and teams winning less than 95 games).  I then compared major offensive statistics between the two categories and created a visualization.
 
 <p align="center"><img src='figures/offensive-comparison.png'/>
 
@@ -66,7 +66,7 @@ Teams winning 95 or more games will likely advance to the post season, while tea
 
 # Regularization
 
-Regularization is adding information to the model to prevent overfitting, reduce co-linearity, and adjust the bias/variance trade-off.  I experimented with L1 Regularization (LASSO) and L2 Regularization (Ridge)
+Regularization is adding information to the model to prevent overfitting, reduce co-linearity, and adjust the bias/variance trade-off.  I experimented with L1 Regularization (LASSO) and L2 Regularization (Ridge).
 
 ## LASSO Regression
 
